@@ -1,0 +1,27 @@
+```mermaid
+sequenceDiagram
+    autonumber
+    actor Docente
+    participant UI as Interfaz de Usuario
+    participant CR as Controlador de Registro
+    participant MA as Módulo de Alertas
+    participant BD as Base de Datos
+    actor Psico as Psicología / Orientación
+
+    Docente->>UI: registrarObservacion(datos, valoracion)
+    UI->>CR: procesarObservacion(datos, valoracion)
+    
+    CR->>BD: guardarObservacion(datos, valoracion)
+    BD-->>CR: confirmacionGuardado()
+    
+    CR->>MA: evaluarRiesgo(valoracion)
+    
+    opt valoracion >= 1 y valoracion <= 3
+        MA->>BD: generarAlertaYCrearCaso()
+        BD-->>MA: confirmacionCaso()
+        MA->>Psico: notificarAlertaNuevoCaso()
+    end
+    
+    CR-->>UI: confirmacionProceso()
+    UI-->>Docente: mostrarMensaje("Registro exitoso")
+```
